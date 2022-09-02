@@ -13,14 +13,94 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 
 nvim_lsp.diagnosticls.setup {
     on_attach = on_attach,
-      filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', 'markdown', 'pandoc' },
+      filetypes = { 
+        'css', 
+        'less', 
+        'scss', 
+        'json', 
+        'pandoc',
+        'python',
+        'markdown', 
+        'typescript', 
+        'javascript', 
+        'javascriptreact', 
+        'typescriptreact', 
+        },
       init_options = {
         linters = {
+          pylint = {
+            command = 'pylint',
+            rootPatterns = { '.git' },
+            debounce = 100,
+            args= {
+                  "--output-format",
+                  "text",
+                  "--score",
+                  "no",
+                  "--msg-template",
+                  "'{line}:{column}:{category}:{msg} ({msg_id}:{symbol})'",
+                  "%file"
+                },
+            formatPattern = {
+                  "^(\\d+?):(\\d+?):([a-z]+?):(.*)$",
+                  {
+                    line = 1,
+                    column= 2,
+                    security= 3,
+                    message= 4
+                  }
+                },
+            rootPatterns = {
+                    "pyproject.toml", 
+                    "setup.py",
+                    "main.py", 
+                    ".vim", 
+                    ".git", 
+                },
+             securities = {
+                  -- informational= "hint",
+                  -- refactor= "info",
+                  -- convention= "info",
+                  -- warning= "warning",
+                  -- error= "error",
+                  -- fatal= "error"
+              [2] = 'error',
+              [1] = 'warning'
+            },
+            offsetColumn= 1,
+            formatLines= 1
+          },
+          flake8 = {
+           command = "flake8",
+            sourceName = "flake8",
+            args = {"--format", "%(row)d:%(col)d:%(code)s: %(text)s", "%file"},
+            formatPattern = {
+              "^(\\d+):(\\d+):(\\w+):(\\w).+: (.*)$",
+              {
+                  line = 1,
+                  column = 2,
+                  message = {"[", 3, "] ", 5},
+                  security = 4
+              }
+            },
+            securities = {
+              E = "error",
+              W = "warning",
+              F = "info",
+              B = "hint",
+            },
+          },
           eslint = {
             command = 'eslint_d',
             rootPatterns = { '.git' },
             debounce = 100,
-            args = { '--stdin', '--stdin-filename', '%filepath', '--format', 'json' },
+            args = { 
+                    '--stdin-filename', 
+                    '%filepath', 
+                    '--format', 
+                    '--stdin', 
+                    'json' 
+                },
             sourceName = 'eslint_d',
             parseJson = {
               errorsRoot = '[0].messages',
@@ -39,16 +119,34 @@ nvim_lsp.diagnosticls.setup {
         },
         filetypes = {
           javascript = 'eslint',
-          javascriptreact = 'eslint',
           typescript = 'eslint',
+          javascriptreact = 'eslint',
           typescriptreact = 'eslint',
+          python = 'pylint',
         },
         formatters = {
           eslint_d = {
             command = 'eslint_d',
-            args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
+            args = { 
+                    '--stdin', 
+                    '%filename', 
+                    '--fix-to-stdout',
+                    '--stdin-filename', 
+                },
             rootPatterns = { '.git' },
           },
+          autopep8 = {
+                args = { },
+                command = 'autopep8',
+            },
+          black = {
+                command = 'autopep8',
+                args = { "--quiet", "-" },
+            },
+          isort = {
+                command = 'isort',
+                args = { "--quiet", "-" },
+            },
           prettier = {
             command = 'prettier',
             args = { '--stdin-filepath', '%filename' }
@@ -56,15 +154,17 @@ nvim_lsp.diagnosticls.setup {
         },
         formatFiletypes = {
           css = 'prettier',
-          javascript = 'eslint_d',
-          javascriptreact = 'eslint_d',
           json = 'prettier',
           scss = 'prettier',
           less = 'prettier',
-          typescript = 'eslint_d',
-          typescriptreact = 'eslint_d',
           json = 'prettier',
+          python = "flake8",
           markdown = 'prettier',
+          javascript = 'eslint_d',
+          typescript = 'eslint_d',
+          javascriptreact = 'eslint_d',
+          typescriptreact = 'eslint_d',
+          -- python = "autopep8", --"isort",
         }
       }
 }
