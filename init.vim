@@ -6,6 +6,7 @@ set wildmenu
 set encoding=UTF-8
 " Ignore files
 set wildignore+=*.pyc
+set wildignore+=*dists/*
 set wildignore+=*_build/*
 set wildignore+=**/coverage/*
 set wildignore+=**/node_modules/*
@@ -58,6 +59,9 @@ call plug#begin("~/.config/nvim/plugged")
 
   Plug 'akinsho/toggleterm.nvim'
 
+  " Formatter integration
+  Plug 'mhartington/formatter.nvim'
+
 call plug#end()
 
 syntax enable " enable syntax highglighting
@@ -84,7 +88,7 @@ set termguicolors
 set noerrorbells
 set nohlsearch
 set updatetime=50
-set colorcolumn=80
+set colorcolumn=120
 " set completeopt=menuone,noinsert,noselect
 
 set undodir=~/.config/nvim/undodir " set undotree file directory
@@ -104,6 +108,20 @@ nnoremap <C-Left> :tabprevious<CR>
 nnoremap <C-Right> :tabnext<CR>
 nnoremap <C-j> :tabprevious<CR>                                                                            
 nnoremap <C-k> :tabnext<CR>
+" " Resize 
+nnoremap <leader>hh :vertical resize -3<CR>
+nnoremap <leader>ll :vertical resize +3<CR>
+nnoremap <leader>kk :resize -3<CR>
+nnoremap <leader>jj :resize +3<CR>
+
+" " Open Terminal  chsh -s /bin/zsh
+" nnoremap <leader>tt :vnew term://bash<CR>
+set shell=/bin/zsh
+nnoremap <leader>tt :vnew term://bash<CR>
+
+" Change split for vertical to horizontal or vice versal
+map <leader>tv <C-w>t<C-w>H
+map <leader>tj <C-w>t<C-w>K
 
 inoremap jk <Esc>
 
@@ -138,6 +156,13 @@ nmap ++ <plug>NERDCommenterToggle
 
 " NERD TREEE
 
+" Lightline
+function! LightlineFilename()
+  return &filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
+        \ &filetype ==# 'unite' ? unite#get_status_string() :
+        \ &filetype ==# 'vimshell' ? vimshell#get_status_string() :
+        \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+endfunction
 
 let g:lightline = {
   \     'colorscheme': 'powerlineish',
@@ -151,13 +176,6 @@ let g:lightline = {
       \ },
   \ }
 
-" Lightline
-function! LightlineFilename()
-  return &filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
-        \ &filetype ==# 'unite' ? unite#get_status_string() :
-        \ &filetype ==# 'vimshell' ? vimshell#get_status_string() :
-        \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-endfunction
 
 let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
@@ -171,7 +189,7 @@ let g:gitgutter_sign_removed_first_line = '^'
 let g:gitgutter_sign_modified_removed = '<'
 
 " Update sign column every quarter second
-set updatetime=250
+set updatetime=200
 
 " Jump between hunks
 nmap <Leader>gn <Plug>(GitGutterNextHunk) " git next
@@ -195,13 +213,13 @@ nnoremap <leader>fgs <cmd>Telescope git_status<cr>
 
 silent! call repeat#set("\<Plug>vim-surround", v:count)
 
-luafile ~/.config/nvim/lua-config/python-lsp.lua
 luafile ~/.config/nvim/lua-config/toggleterm.lua
 luafile ~/.config/nvim/lua-config/telescope.lua
 " luafile ~/.config/nvim/lua-config/bash-lsp.lua
 luafile ~/.config/nvim/lua-config/compe-config.lua
 luafile ~/.config/nvim/lua-config/lspsaga.lua
 luafile ~/.config/nvim/lua-config/typescript.lua
+luafile ~/.config/nvim/lua-config/python-lsp.lua
 luafile ~/.config/nvim/lua-config/diagnosticls.lua
 
 source ~/.config/nvim/plug-config/nerdtreee.vim
