@@ -1,4 +1,7 @@
-nmap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
+" nmap <C-n> :NERDTree<CR>
+" nnoremap <C-n> :NERDTreeFocus<CR>
+
 let g:NERDTreeGitStatusWithFlags = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:NERDTreeGitStatusNodeColorization = 1

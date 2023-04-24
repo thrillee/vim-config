@@ -158,13 +158,13 @@ nvim_lsp.diagnosticls.setup {
           scss = 'prettier',
           less = 'prettier',
           json = 'prettier',
-          python = "flake8",
+          -- python = "flake8",
           markdown = 'prettier',
           javascript = 'eslint_d',
           typescript = 'eslint_d',
           javascriptreact = 'eslint_d',
           typescriptreact = 'eslint_d',
-          -- python = "autopep8", --"isort",
+          python = "autopep8", --"isort",
         }
       }
 }

@@ -81,7 +81,7 @@ M.dev = function(opts)
     opts = opts or {}
 
     opts.cwd = opts.cwd or vim.loop.fs_realpath(vim.loop.cwd())
-    print("HEY BAE", opts.cwd)
+    print("Hello Thrillee", opts.cwd)
 
     local possible_files = vim.api.nvim_get_runtime_file(
         "/lua/**/dev.lua",
@@ -178,4 +178,14 @@ M.dev = function(opts)
     }):find()
 end
 
+vim.api.nvim_set_keymap('n', '<C-p>', '<cmd>Telescope find_files<cr>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>Telescope buffers<cr>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>ffb', '<cmd>Telescope file_browser<cr>', { noremap = true })
+
 return M 
+
+
